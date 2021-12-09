@@ -1,0 +1,84 @@
+---
+swagger: "2.0"
+info:
+  description: Turksat mail sınıflandırması için API
+  version: 1.0.0
+  title: Turksat-API
+  contact:
+    email: umutcan.yavuz2000@hotmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: apiss.turksat.com.tr/services/PvEntaio
+tags:
+- name: admins
+  description: Secured Admin-only calls
+- name: developers
+  description: Operations available to regular developers
+schemes:
+- https
+paths:
+  /email-classifier/api/v1/emails:
+    post:
+      tags:
+      - admins
+      - developers
+      summary: Returns the classification result
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        required: true
+        type: string
+      - in: body
+        name: Parametre
+        description: Parametreler
+        required: false
+        schema:
+          $ref: '#/definitions/load'
+      responses:
+        "400":
+          description: invalid input, object invalid
+        "200":
+          description: OK
+    put:
+      tags:
+      - admins
+      - developers
+      summary: Returns the classification result
+      consumes:
+      - multipart/form-data
+      parameters:
+      - name: X-Auth-Token
+        in: header
+        required: true
+        type: string
+      - name: file
+        in: formData
+        required: true
+        type: file
+      - name: model
+        in: formData
+        required: true
+        type: string
+      responses:
+        "400":
+          description: invalid input, object invalid
+        "200":
+          description: OK
+definitions:
+  load:
+    type: object
+    required:
+    - model
+    - text
+    - threshold
+    properties:
+      model:
+        type: string
+        example: function
+      text:
+        type: string
+        example: Emeklilik durumu öğrenmek istiyorum
+      threshold:
+        type: number
+        example: 0.5
